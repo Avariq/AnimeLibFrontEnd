@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" charset="utf-8" />
+    <title>AnimeLib</title>
+    <link href="CSS/main.css" rel="stylesheet" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Zen+Kurenaido&display=swap" rel="stylesheet">
+    <script src="JS/jquery-3.6.0.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    <script src="JS/global.js"></script>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="container">
+            <div class="logo">AnimeLib</div>
+            <ul class="menu">
+                <li><a id="admin-page" class="admin-page" href="HTML/AdminPage.html"> Admin page </a></li>
+                <li><a href="#"> Main page </a></li>
+                <li><a id="random-anime" href="#">Random Anime</a></li>
+                <li id="login" class="login"><a href="HTML/Login.html">Log in</a></li>
+                <li id="logout" class="logout"><a href="index.html?page=1">Log out</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="content">
+        <div class="container">
+            <div id="search-field-block">
+                <input id="search" autocomplete="off" class="search-field" type="text" name="word" placeholder="    Find anime by title" />
+            </div>
+        </div>
+        <div class="container">
+            <div id="filter-block">
+                <form id="filter-form">
+                    <div class="filter-section">
+                        <label for="statuses[]">Statuses</label>
+                        <select name="statuses[]" id="status-multichoice" multiple="multiple">
+                            <option value="Ongoing">Ongoing</option>
+                            <option value="Released">Released</option>
+                            <option value="Announced">Announced</option>
+                        </select>
+                        <label for="ars[]">Age Restrictions</label>
+                        <select name="ars[]" id="ar-multichoice" multiple="multiple">
+                            <option value="G">G</option>
+                            <option value="PG12">PG12</option>
+                            <option value="R15">R15</option>
+                            <option value="R18">R18</option>
+                        </select>
+                        <label for="genres[]">Genres</label>
+                        <select name="genres[]" id="genre-multichoice" multiple="multiple">
+                        </select>
+                        <label for="filter_year_from">From year</label>
+                        <input id="filter_year_from" type="text" name="year_from" placeholder="yyyy" />
+                        <label for="filter_year_to">To year</label>
+                        <input id="filter_year_to" type="text" name="year_to" placeholder="yyyy" />
+                        <label for="orderBy">Order by</label>
+                        <select name="orderBy" id="order-choice">
+                            <option value="">No order</option>
+                            <option value="Title">title</option>
+                            <option value="Year">year</option>
+                            <option value="Rating">rating</option>
+                            <option value="Votes">votes</option>
+                            <option value="Views">views</option>
+                        </select>
+                        <label for="isDescending">Sort by</label>
+                        <select name="isDescending" id="isDescending">
+                            <option value="false">Ascending</option>
+                            <option value="true">Descending</option>
+                        </select>
+    
+                        <input type="submit" name="submit" value="Submit" />
+                    </div>
+                </form>
+            </div>
+            <div class="tabs-block">
+                <header class="tabs-header">
+                    <div class="tabs-header-block"><p>Recently Added</p></div>
+                </header>
+    
+                <div class="tabs-content">
+                    <div id="new" class="tab-content">
+                    </div>
+                </div>
+                <div id="pagination-block"></div>
+            </div>
+        </div>
+    </div>
+
+    <script type="text/javascript">
+
+        var animePerPage = 4;
+        var genres = null;
+
+        jQuery.extend({
+            displayPages: function (pageCount) {
+                for (var i = 0; i < pageCount; i++) {
+                    $("#pagination-block").append('<a href="?page='+ (i+1) +'">' + (i + 1) + '</a>');
+                }
+            },
+            getUrlVars: function () {
+                var vars = [], hash;
+                var hashes = window.location.href.slice(window.location.href.indexOf('?') + 1).split('&');
+                for (var i = 0; i < hashes.length; i++) {
+                    hash = hashes[i].split('=');
+                    vars.push(hash[0]);
+                    vars[hash[0]] = hash[1];
+                }
+                return vars;
+            },
+            displayPage: function () {
+                var vars = $.getUrlVars();
+                var pageNumber = vars["page"];
+                Manager.GetRecent(pageNumber, animePerPage);
+            },
+            getRandomAnime: function () {
+                var anime = null;
+                $.ajax({
+                    type: 'get',
+                    url: 'https://localhost:5001/api/Anime/GetRandomAnime',
+                    dataType: 'json',
+                    async: false,
+                    success: function (data) {
+                        anime = data;
+                        console.log(anime);
+                    },
+                    error: function (errorThrown) {
+                        console.log(errorThrown);
+                    }
+                });
+                return anime;
+            }
+        });
+
+        var timer;
+
+        $(document).ready(function () {
+            setExpiration();
+            RandomAnime();
+            timer = window.setInterval(refreshExpiration, 5000);
+            displayAdminPage();
+            displayLogInOut();
+            $.displayPage(1, animePerPage);
+            genres = $.getAllGenres();
+            InjectGenres();
+            $("#status-multichoice").select2();
+            $("#ar-multichoice").select2();
+            $("#genre-multichoice").select2();
+            $("#order-choice").select2();
+            $("#isDescending").select2();
+        });
+
+        function RandomAnime() {
+            var anime = $.getRandomAnime();
+            $("#random-anime").attr("href", "https://localhost:5001/HTML/Anime.html?Id=" + anime.id);
+        }
+
+        $("#logout").click(function (event) {
+            event.preventDefault();
+
+            localStorage.removeItem("JwtToken");
+            removeExpiration();
+            window.location.href = "/index.html?page=1";
+        });
+
+        function displayLogInOut() {
+            var token = localStorage.getItem("JwtToken");
+            if (token) {
+                var parsedToken = JSON.parse(atob(token.split('.')[1]));
+                if (Date.now() < parsedToken['exp'] * 1000) {
+                    $("#login").hide();
+                    $("#logout").show();
+                }
+                else {
+                    window.clearInterval(timer);
+                    $("#login").show();
+                    $("#logout").hide();
+                    window.localStorage.removeItem("JwtToken");
+                }
+            }
+            else {
+                window.clearInterval(timer);
+                $("#login").show();
+                $("#logout").hide();
+                window.localStorage.removeItem("JwtToken");
+            }
+        }
+
+        function displayAdminPage() {
+            var token = localStorage.getItem("JwtToken");
+            if (token) {
+                var parsedToken = JSON.parse(atob(token.split('.')[1]));
+                if (Date.now() >= parsedToken['exp'] * 1000) {
+                    $("#admin-page").hide();
+                    return false;
+                }
+                console.log(parsedToken);
+                if (parsedToken['role'] == "Admin") {
+                    $("#admin-page").show();
+                }
+                else {
+                    $("#admin-page").hide();
+                }
+            }   
+        }
+
+        var Manager = {
+            GetRecent: function (pageNumber, pageSize) {
+                var obj = "";
+                var sourceUrl = "https://localhost:5001/api/Anime/GetRecent?pageNumber=" + pageNumber + "&pageSize=" + pageSize;
+                window.Manager.GetAPI(sourceUrl, onSuccess, onFail);
+                function onSuccess(jsonData) {
+                    obj = jsonData;
+                    data = Object.entries(jsonData);
+                    console.log("json", jsonData);
+                    var pageCount = jsonData.totalPagesAmount;
+                    $.displayPages(pageCount);
+                    for (var i = 0; i < data[0][1].length; i++) {
+                        var elem = data[0][1][i];
+                        var html = '';
+                        html += '<div class="preview-block">';
+                        html += '<a href="https://localhost:5001/HTML/Anime.html?Id=' + elem.id + '">';
+                        html += '<img class="preview-img" src="' + elem.image + '" alt=""/></a>';
+                        html += '<div class="preview-info-block">';
+                        html += '<a href="https://localhost:5001/HTML/Anime.html?Id=' + elem.id + '" class="preview-title">' + elem.title + '</a>'
+
+                        html += '<div>';
+                        var rating = elem.rating;
+                        html += '<span class="main-rating">' + rating + '</span>';
+                        html += '<span class="main-rating-info">' + elem.votes + ' total votes</span>';
+                        html += '</div>'
+
+                        html += '<ul class="content-main-info"><li>';
+                        if (elem.year) {
+                            html += elem.year + ' | ';
+                        }
+                        html += elem.status.statusName;
+                        html += ' | Episodes: ';
+                        if (elem.episodes) {
+                            html += elem.episodes;
+                        }
+                        else {
+                            html += '1+';
+                        }
+                        html += '</li>';
+                        if (elem.genres.length > 0) {
+                            html += '<li class="categories-list">';
+                            html += '<span>Genres:</span>';
+                            html += '<ul>'
+                            elem.genres.forEach(function (cat) {
+                                html += '<li>' + cat.genre.name + '</li>';
+                            })
+                            html += '</ul>';
+                        }
+                        html += '<li class="ageRestr"><span>Age Restriction:</span>' + elem.ageRestriction.restrictionCode + ' (' + elem.ageRestriction.ageRequired + '+)' + '</li>';
+                        html += '</ul></div></div>';
+                        $("#new").append(html);
+                    }
+                }
+                function onFail(error) {
+                    window.alert(error.statusText);
+                }
+                return obj;
+            },
+
+            GetAPI: function (sourceUrl, successCallback, failCallback) {
+                $.ajax({
+                    type: "GET",
+                    url: sourceUrl,
+                    dataType: "json",
+                    success: successCallback,
+                    error: function (errorThrown) {
+                        console.log(errorThrown);
+                    }
+                });
+            }
+        }
+
+        $("#search").bind("keypress", {}, keypressInBox);
+
+        function keypressInBox(e) {
+            var code = (e.keyCode ? e.keyCode : e.which);
+            if (code == 13) {
+                e.preventDefault();
+
+                var input = $("#search").val().toString();
+
+                var url = '?titleFragment=' + input + "&page=1";
+
+                window.location.href = 'https://localhost:5001/HTML/Search.html' + url;
+            }
+        };
+
+        function InjectGenres() {
+            for (var i = 0; i < genres.length; i++) {
+                genre = genres[i];
+                var newOption = '<option value="' + genre.id + '">' + genre.name + '</option>';
+                $("#genre-multichoice").append(newOption);
+            }
+        }
+
+        $("#filter-form").submit(function (event) {
+            event.preventDefault();
+            var statusInput = $("#status-multichoice").val();
+            var statuses = '';
+            for (var i = 0; i < statusInput.length; i++) {
+                statuses += 'statusIds=' + $.getStatusId(statusInput[i]);
+                if (i + 1 >= statusInput.length) {
+                    break;
+                }
+                statuses += '&';
+            }
+            var arsInput = $("#ar-multichoice").val();
+            var ars = '&';
+            for (var i = 0; i < arsInput.length; i++) {
+                ars += 'arIds=' + $.getAgeRestrictionId(arsInput[i]);
+                if (i + 1 >= arsInput.length) {
+                    break;
+                }
+                ars += '&';
+            }
+            var genresInput = $("#genre-multichoice").val();
+            var genres = '&';
+            for (var i = 0; i < genresInput.length; i++) {
+                genres += 'genreIds=' + genresInput[i];
+                if (i + 1 >= genresInput.length) {
+                    break;
+                }
+                genres += '&';
+            }
+            if (ars == '&') ars = '';
+            if (genres == '&') genres = '';
+            var fromYear = '&from_year=' + $("#filter_year_from").val();
+            if (fromYear == '&from_year=') fromYear = '';
+            var toYear = '&to_year=' + $("#filter_year_to").val();
+            if (toYear == '&to_year=') toYear = '';
+            var titleFragment = '&titleFragment=' + $("#search").val();
+            if (titleFragment == '&titleFragment=') titleFragment = '';
+            var orderBy = '&orderBy=' + $("#order-choice").val();
+            if (orderBy == '&orderBy=') orderBy = '';
+            var isDescending = '&isDescending=' + $("#isDescending").val();
+            if (isDescending == '&isDescending=false') isDescending = '';
+
+            var url = '?' + statuses + ars + genres + fromYear + toYear + titleFragment + orderBy + isDescending;
+            localStorage.setItem("FilterUrl", url);
+            window.location.href = 'https://localhost:5001/HTML/Search.html' + url + '&page=1';
+        });
+
+    </script>
+
+</body>
+</html>

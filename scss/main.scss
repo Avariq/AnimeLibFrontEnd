@@ -1,0 +1,266 @@
+@import "variables";
+
+
+@mixin customizeButton($width, $height) {
+    background-color: $intermediate-background-color;
+    color: $primary-accent-color;
+    font-size: 16px;
+    width: $width;
+    height: $height;
+}
+
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: 'Zen Kurenaido', sans-serif;
+}
+
+body {
+    background-color: $primary-background-color;
+    font-size: 16px;
+    line-height: 1.4;
+    color: white;
+}
+
+img {
+    max-width: 100%;
+}
+
+.container {
+    max-width: $container-max-width;
+    margin: 0 auto;
+}
+
+.navbar {
+    border-top: $secondary-background-color 3px solid;
+    border-bottom: $secondary-background-color 3px solid;
+    height: 60px;
+}
+
+.navbar .logo {
+    font-size: x-large;
+    font-weight: bold;
+    color: $primary-accent-color;
+}
+
+ul {
+    list-style: none;
+}
+
+.navbar .container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 100%;
+}
+
+.menu a {
+    color: white;
+    text-decoration: none;
+    font-size: 22px;
+    font-weight: bold;
+    padding: 12px 10px;
+}
+
+.menu a:hover {
+    background-color: $secondary-background-color;
+    transition-duration: 0.3s;
+}
+
+.menu {
+    display: flex;
+}
+
+.login, .logout {
+    margin-left: 50px;
+    display: none;
+}
+
+#admin-page {
+    display: none;
+}
+
+.content {
+    margin-top: 50px;
+}
+
+.content .container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+}
+
+.select2-results {
+    background-color: $intermediate-background-color;
+    color: $primary-accent-color;
+    font-weight: bold;
+}
+
+.select2-selection__rendered {
+    color: $primary-accent-color;
+    font-weight: bold;
+}
+
+.search-field {
+    min-width: 200px;
+    width: 600px;
+    background-color: $intermediate-background-color;
+    height: 40px;
+    color: white;
+    margin-bottom: 20px;
+}
+
+#filter-block {
+    width: $filter-block-width;
+    height: 600px;
+    border: $primary-accent-color 3px solid;
+    order: 2;
+    background-color: $intermediate-background-color;
+}
+
+.filter-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+}
+.filter-section select, input {
+    width: 80%;
+}
+
+.filter-section input[type=submit] {
+    @include customizeButton(80%, 30px);
+    margin-top: 10px;
+}
+
+.content .tabs-block {
+    width: $container-max-width - $filter-block-width - 10px;
+    background-color: $intermediate-background-color;
+    max-height: 600px;
+}
+
+.tabs-block .tabs-header {
+    width: 100%;
+    border-bottom: $primary-accent-color 3px solid;
+    height: 50px;
+}
+
+.tabs-header .tabs-header-block {
+    background-color: $primary-accent-color;
+    width: 170px;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.tabs-header-block p {
+    font-size: 20px;
+}
+
+.tab-content {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+}
+
+.preview-block {
+    background-color: $secondary-background-color;
+    height: 240px;
+    width: 495px;
+    margin-bottom: 15px;
+}
+
+.preview-img {
+    float: left;
+    width: 170px;
+    height: 240px;
+}
+
+.preview-info-block {
+    padding: 10px 10px;
+    height: 240px;
+    overflow: auto;
+}
+
+.content-main-info {
+    line-height: 26px;
+    display: flex;
+    flex-direction: column;
+}
+
+.preview-title {
+    color: white;
+    text-decoration: none;
+    font-size: 30px;
+}
+
+.preview-title:hover {
+    color: $primary-accent-color;
+    transition-duration: 0.3s;
+    cursor: pointer;
+}
+
+.categories-list {
+    display: flex;
+    width: 100%;
+    max-height: 70px;
+}
+
+.categories-list span {
+    font-weight: bold;
+}
+
+.categories-list ul {
+    list-style: none;
+}
+
+.categories-list li {
+    margin-left: 5px;
+    color: $primary-accent-color;
+}
+
+.ageRestr span {
+    font-weight: bold;
+    margin-right: 5px;
+}
+
+.main-rating {
+    color: white;
+    background-color: $rating-color;
+    padding: 0px 5px;
+    border-radius: 3px;
+    font-weight: bold;
+    cursor: pointer;
+    font-size: 19px;
+}
+
+.main-rating-info {
+    margin-left: 5px;
+    color: white;
+    font-size: 14px;
+}
+
+#pagination-block {
+    width: 100%;
+    height: 30px;
+    background-color: $secondary-background-color;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 10px;
+}
+
+#pagination-block > a {
+    padding: 4px;
+    text-decoration: none;
+    color: white;
+}
+
+#pagination-block > a:hover {
+    background-color: $primary-background-color;
+    transition-duration: 0.3s;
+    cursor: pointer;
+}
