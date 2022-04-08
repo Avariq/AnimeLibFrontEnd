@@ -15,10 +15,9 @@
 <body>
     <nav class="navbar">
         <div class="container">
-            <div class="logo">AnimeLib</div>
+            <div class="logo"><a href="index.html?page=1" class="logo-link">AnimeLib</a></div>
             <ul class="menu">
                 <li><a id="admin-page" class="admin-page" href="HTML/AdminPage.html"> Admin page </a></li>
-                <li><a href="#"> Main page </a></li>
                 <li><a id="random-anime" href="#">Random Anime</a></li>
                 <li id="login" class="login"><a href="HTML/Login.html">Log in</a></li>
                 <li id="logout" class="logout"><a href="index.html?page=1">Log out</a></li>
@@ -114,23 +113,6 @@
                 var vars = $.getUrlVars();
                 var pageNumber = vars["page"];
                 Manager.GetRecent(pageNumber, animePerPage);
-            },
-            getRandomAnime: function () {
-                var anime = null;
-                $.ajax({
-                    type: 'get',
-                    url: 'https://localhost:5001/api/Anime/GetRandomAnime',
-                    dataType: 'json',
-                    async: false,
-                    success: function (data) {
-                        anime = data;
-                        console.log(anime);
-                    },
-                    error: function (errorThrown) {
-                        console.log(errorThrown);
-                    }
-                });
-                return anime;
             }
         });
 
@@ -152,11 +134,6 @@
             $("#isDescending").select2();
         });
 
-        function RandomAnime() {
-            var anime = $.getRandomAnime();
-            $("#random-anime").attr("href", "https://localhost:5001/HTML/Anime.html?Id=" + anime.id);
-        }
-
         $("#logout").click(function (event) {
             event.preventDefault();
 
@@ -164,47 +141,6 @@
             removeExpiration();
             window.location.href = "/index.html?page=1";
         });
-
-        function displayLogInOut() {
-            var token = localStorage.getItem("JwtToken");
-            if (token) {
-                var parsedToken = JSON.parse(atob(token.split('.')[1]));
-                if (Date.now() < parsedToken['exp'] * 1000) {
-                    $("#login").hide();
-                    $("#logout").show();
-                }
-                else {
-                    window.clearInterval(timer);
-                    $("#login").show();
-                    $("#logout").hide();
-                    window.localStorage.removeItem("JwtToken");
-                }
-            }
-            else {
-                window.clearInterval(timer);
-                $("#login").show();
-                $("#logout").hide();
-                window.localStorage.removeItem("JwtToken");
-            }
-        }
-
-        function displayAdminPage() {
-            var token = localStorage.getItem("JwtToken");
-            if (token) {
-                var parsedToken = JSON.parse(atob(token.split('.')[1]));
-                if (Date.now() >= parsedToken['exp'] * 1000) {
-                    $("#admin-page").hide();
-                    return false;
-                }
-                console.log(parsedToken);
-                if (parsedToken['role'] == "Admin") {
-                    $("#admin-page").show();
-                }
-                else {
-                    $("#admin-page").hide();
-                }
-            }   
-        }
 
         var Manager = {
             GetRecent: function (pageNumber, pageSize) {
@@ -221,10 +157,10 @@
                         var elem = data[0][1][i];
                         var html = '';
                         html += '<div class="preview-block">';
-                        html += '<a href="https://localhost:5001/HTML/Anime.html?Id=' + elem.id + '">';
+                        html += '<a href="/HTML/Anime.html?Id=' + elem.id + '">';
                         html += '<img class="preview-img" src="' + elem.image + '" alt=""/></a>';
                         html += '<div class="preview-info-block">';
-                        html += '<a href="https://localhost:5001/HTML/Anime.html?Id=' + elem.id + '" class="preview-title">' + elem.title + '</a>'
+                        html += '<a href="/HTML/Anime.html?Id=' + elem.id + '" class="preview-title">' + elem.title + '</a>'
 
                         html += '<div>';
                         var rating = elem.rating;
@@ -289,7 +225,7 @@
 
                 var url = '?titleFragment=' + input + "&page=1";
 
-                window.location.href = 'https://localhost:5001/HTML/Search.html' + url;
+                window.location.href = '/HTML/Search.html' + url;
             }
         };
 
@@ -345,7 +281,7 @@
 
             var url = '?' + statuses + ars + genres + fromYear + toYear + titleFragment + orderBy + isDescending;
             localStorage.setItem("FilterUrl", url);
-            window.location.href = 'https://localhost:5001/HTML/Search.html' + url + '&page=1';
+            window.location.href = '/HTML/Search.html' + url + '&page=1';
         });
 
     </script>

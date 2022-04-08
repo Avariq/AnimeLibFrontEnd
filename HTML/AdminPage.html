@@ -1,0 +1,555 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" charset="utf-8" />
+    <title>AnimeLib</title>
+    <link href="../CSS/main.css" rel="stylesheet" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Zen+Kurenaido&display=swap" rel="stylesheet">
+    <script src="../JS/jquery-3.6.0.min.js"></script>
+    <script src="../JS/global.js"></script>
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.13.0/themes/base/jquery-ui.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
+    <script src="https://code.jquery.com/ui/1.13.0/jquery-ui.js"></script>
+    <script src="../JS/AdminPage.js"></script>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="container">
+            <div class="logo"><a href="../index.html?page=1" class="logo-link">AnimeLib</a></div>
+            <ul class="menu">
+                <li id="login" class="login"><a href="HTML/Login.html">Log in</a></li>
+                <li id="logout" class="logout"><a href="../index.html?page=1">Log out</a></li>
+            </ul>
+        </div>
+    </nav>
+    <div class="ap-container">
+        <div class="option-container">
+            <ul class="ap-option-menu">
+                <li id="new-anime">New Anime</li>
+                <li id="new-arc">New Arc</li>
+                <li id="new-episode">New Episode</li>
+            </ul>
+        </div>
+        <div id="new-anime-block">
+            <form id="new-anime-form">
+                <div class="new-anime-block">
+                    <div class="anime-main">
+                        <div>
+                            <p>Title:</p>
+                            <input id="anime-name" type="text" name="anime-name" value="" />
+                        </div>
+                        <div>
+                            <p>Year:</p>
+                            <input id="anime-year" type="text" name="anime-year" value="" />
+                        </div>
+                        <div>
+                            <p>Episodes:</p>
+                            <input id="anime-episodes" type="text" name="anime-episodes" value="" />
+                        </div>
+                    </div>
+                    <div class="anime-description-block">
+                        <p>Description:</p>
+                        <textarea id="anime-description" name="anime-description"></textarea>
+                    </div>
+                    <div class="anime-status-block">
+                        <p>Status:</p>
+                        <div class="status-choice">
+                            <input type="radio" id="s-released" name="status" value="Released" />
+                            <label for="s-released">Released</label> <br />
+                            <input type="radio" id="s-ongoing" name="status" value="Ongoing" />
+                            <label for="s-ongoing">Ongoing</label> <br />
+                            <input type="radio" id="s-announced" name="status" value="Announced" />
+                            <label for="s-announced">Announced</label> <br />
+                        </div>
+                    </div>
+                    <div class="anime-ar-block">
+                        <p>Age Restriction:</p>
+                        <div class="ar-choice">
+                            <label><input type="radio" id="ar-g" name="ar" value="G" />G (0+)</label>
+                            <label><input type="radio" id="ar-pg12" name="ar" value="PG12" />PG12 (12+)</label>
+                            <label><input type="radio" id="R15" name="ar" value="R15" />R15 (15+)</label>
+                            <label><input type="radio" id="r18" name="ar" value="R18" />R18 (18+)</label>
+                        </div>
+                    </div>
+                    <div class="anime-genres-block">
+                        <p>Genres:</p>
+                        <div id="genre-choice" class="genre-choice">
+                            
+                        </div>
+                    </div>
+                    <div class="upload-image-block">
+                        <label>Select an image:<input type="file" id="img-file" name="files" accept="image/*" /></label>
+                    </div>
+                    <div class="anime-submit-block">
+                        <input id="anime-submit" class="anime-submit" type="submit" value="Submit" />
+                    </div>
+                </div>
+            </form>
+        </div>
+        
+        <div id="new-arc-block">
+            <div class="new-arc-block">
+                <form id="new-arc-form">
+                    <div class="arc-anime-title">
+                        <label>Anime:<input autocomplete="off" id="arc-anime-title" type="text" class="autofill-anime-title" /></label>
+                    </div>
+                    <div class="arc-arc-title">
+                        <label>New Arc:<input id="arc-arc-title" type="text" /></label>
+                    </div>
+                    <div class="arc-submit-block">
+                        <input id="arc-submit" class="arc-submit" type="submit" value="Submit" />
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <div id="new-episode-block">
+            <form id="new-episode-form">
+                <div class="new-episode-block">
+                    <div class="ep-anime-block">
+                        <label>Anime name:<input id="ep-anime-title" type="text" class="autofill-anime-title" /></label>
+                        <label>Arc name:<input id="ep-arc-title" type="text" /></label>
+                    </div>
+                    <div class="ep-episode-block">
+                        <label>Episode name:<input id="ep-title" type="text" /></label>
+                        <label>Episode length (min):<input id="ep-length" type="text" /></label>
+                    </div>
+                    <div class="ep-submit-block">
+                        <input id="ep-submit" class="ep-submit" type="submit" value="Submit" />
+                    </div>
+                </div>
+            </form>     
+        </div>
+    </div>
+
+    <script type="text/javascript">
+
+        function filterBody(name, tname, values, pname) {
+            this.Name = name;
+            this.TypeName = tname;
+            this.Values = values;
+            this.PropertyName = pname;
+        }
+
+        $("#logout").click(function (event) {
+            event.preventDefault();
+
+            localStorage.removeItem("JwtToken");
+            removeExpiration();
+            window.location.href = "../index.html?page=1";
+        });
+
+        jQuery.extend({
+            getAllGenres: function () {
+                var genres = Array();
+                $.ajax({
+                    type: 'get',
+                    url: 'https://localhost:5001/api/Anime/GetAllGenres',
+                    dataType: 'json',
+                    async: false,
+                    success: function (data) {
+                        genres = data;
+                    },
+                    error: function (errorThrown) {
+                        console.log(errorThrown);
+                    }
+                });
+                return genres;
+            }
+        });
+
+        var genres = null;
+        var animes = [];
+
+        var timer;
+
+        $(document).ready(function () {
+            setExpiration();
+            displayLogInOut();
+            timer = window.setInterval(refreshExpiration, 5000);
+            genres = $.getAllGenres();
+            display_genres();
+        })
+
+        $('.autofill-anime-title').keypress(function () {
+            if ($(this).val().length > 2 && $(this).val().length <= 4) {
+                var titleContainsTextFilter = new filterBody("TitleContainsText", "string", [$(this).val().toString()], "some");
+                var filters = []
+                filters.push(titleContainsTextFilter)
+                animes = []
+                animesJson = getAnimesByFilter(filters);
+                for (var i = 0; i < animesJson.animes.length; i++) {
+                    animes.push(animesJson.animes[i].title);
+                }
+                console.log(animes);
+                fieldsAutoComplete()
+            }
+        });
+
+        function fieldsAutoComplete() {
+
+            $('#arc-anime-title').autocomplete({
+                source: animes,
+                minLength: 2
+            });
+
+            var arcs = null;
+
+            $('#ep-anime-title').autocomplete({
+                source: animes,
+                minLength: 2
+            });
+
+            $('#ep-anime-title').blur(function () {
+                var animeTitle = document.getElementById('ep-anime-title').value;
+                if (jQuery.inArray(animeTitle, animes) == -1) {
+                    console.error("Such anime does not exist.");
+                    return;
+                }
+                var Id = $.getAnimeId(animeTitle);
+                arcs = $.getArcTitles(Id);
+                $('#ep-arc-title').autocomplete
+                    ({
+                        source: arcs,
+                        minLength: 0
+                    })
+                    .focus(function () {
+                        $(this).autocomplete('search', $(this).val())
+                    });
+            });
+        }
+
+        function display_genres() {
+            for (var i = 0; i < genres.length; i++) {
+                $("#genre-choice").append('<label><input type="checkbox" name="anime-genre" value="' + genres[i].name + '" />' + genres[i].name + '</label>');
+            }
+        }
+
+        $("#new-anime").click(function () {
+            $("#new-arc").removeClass("viewing");
+            $("#new-episode").removeClass("viewing");
+            $("#new-arc-block").hide();
+            $("#new-episode-block").hide();
+            $("#new-anime-block").fadeIn();
+            $("#new-anime").addClass("viewing");
+        });
+        $("#new-arc").click(function () {
+            $("#new-anime").removeClass("viewing");
+            $("#new-episode").removeClass("viewing");
+            $("#new-anime-block").hide();
+            $("#new-episode-block").hide();
+            $("#new-arc-block").fadeIn();
+            $("#new-arc").addClass("viewing");
+        });
+        $("#new-episode").click(function () {
+            $("#new-anime").removeClass("viewing");
+            $("#new-anime-block").hide();
+            $("#new-arc-block").hide();
+            $("#new-arc").removeClass("viewing");
+            $("#new-episode-block").fadeIn();
+            $("#new-episode").addClass("viewing");
+        });
+
+        jQuery.extend({
+            getAnimeId: function (animeTitle) {
+                var Id = -1;
+                $.ajax({
+                    type: "get",
+                    url: "https://localhost:5001/api/Anime/GetAnimeIdByTitle?title=" + animeTitle,
+                    dataType: "json",
+                    async: false,
+                    success: function (data) {
+                        Id = data;
+                    },
+                    error: function (errorThrown) {
+                        console.log(errorThrown);
+                    }
+                });
+                return Id;
+            }
+        });
+        jQuery.extend({
+            getAnimeTitles: function () {
+                var animes = null;
+                $.ajax({
+                    type: 'get',
+                    url: 'https://localhost:5001/api/Anime/GetAnimeTitles',
+                    dataType: 'json',
+                    async: false,
+                    success: function (data) {
+                        animes = data;
+                    },
+                    error: function (errorThrown) {
+                        console.log(errorThrown);
+                    }
+                });
+                return animes;
+            }
+        });
+        jQuery.extend({
+            getArcTitles: function (animeId) {
+                var arcs = null;
+                $.ajax({
+                    type: 'get',
+                    url: 'https://localhost:5001/api/Arc/GetArcs?animeId=' + animeId,
+                    dataType: 'json',
+                    async: false,
+                    success: function (data) {
+                        arcs = data;
+                    },
+                    error: function (errorThrown) {
+                        console.log(errorThrown);
+                    }
+                });
+                return arcs;
+            }
+        });
+        jQuery.extend({
+            getArcId: function (arcName, animeId) {
+                var id = -1;
+                $.ajax({
+                    type: 'get',
+                    url: 'https://localhost:5001/api/Arc/GetArcId?arcName=' + arcName + '&animeId=' + animeId,
+                    dataType: 'json',
+                    async: false,
+                    success: function (data) {
+                        id = data;
+                    },
+                    error: function (errorThrown) {
+                        console.log(errorThrown);
+                    }
+                });
+                return id;
+            }
+        });
+        jQuery.extend({
+            getEpId: function (arcId, epName) {
+                var id = -1;
+                $.ajax({
+                    type: 'get',
+                    url: 'https://localhost:5001/api/Episode/GetEpisodeId?arcId=' + arcId + '&epName=' + epName,
+                    dataType: 'json',
+                    async: false,
+                    success: function (data) {
+                        id = data;
+                    },
+                    error: function (errorThrown) {
+                        console.log(errorThrown);
+                    }
+                });
+
+                return id;
+            }
+        });
+        jQuery.extend({
+            getStatusId: function (statusName) {
+                var id = -1;
+                $.ajax({
+                    type: 'get',
+                    url: 'https://localhost:5001/api/Anime/GetStatusId?statusName=' + statusName,
+                    dataType: 'json',
+                    async: false,
+                    success: function (data) {
+                        console.log("retrieved data:", data);
+                        id = data;
+                    },
+                    error: function (errorThrown) {
+                        console.log(errorThrown);
+                    }
+                });
+                return id;
+            }
+        });
+        jQuery.extend({
+            getAgeRestrictionId: function (ARCode) {
+                var id = -1;
+                $.ajax({
+                    type: 'get',
+                    url: 'https://localhost:5001/api/Anime/GetAgeRestrictionId?ageRestrictionCode=' + ARCode,
+                    dataType: 'json',
+                    async: false,
+                    success: function (data) {
+                        id = data;
+                    },
+                    error: function (errorThrown) {
+                        console.log(errorThrown);
+                    }
+                });
+                return id;
+            }
+        });
+        
+
+        
+
+        $("#new-episode-form").submit(function (event) {
+            event.preventDefault();
+
+            var $form = $(this);
+            var $inputs = $form.find("input");
+
+            $inputs.prop("disabled", true);
+
+            var animeTitle = document.getElementById("ep-anime-title").value.toString();
+            var arcTitle = document.getElementById("ep-arc-title").value.toString();
+
+            var animeId = $.getAnimeId(animeTitle);
+            var arcId = $.getArcId(arcTitle, animeId);
+
+            var epName = document.getElementById("ep-title").value.toString();
+            var epLen = document.getElementById("ep-length").value;
+
+            var request = $.ajax({
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer ' + localStorage.getItem('JwtToken')
+                },
+                url: "https://localhost:5001/api/Episode/CreateEpisode",
+                type: "post",
+                dataType: "json",
+                async: false,
+                data: JSON.stringify({ "name": epName, "duration": epLen, "arcId": arcId })
+            });
+            request.done(function (response, textStatus, jqXHR) {
+                console.log("NewEpisode: Success 201");
+            });
+
+            request.fail(function (responce, textStatus, errorThrown) {
+                console.error(
+                    "The following error occurred: " +
+                    responce.responseText.split('.')[0].replace('"', "")
+                );
+            });
+
+            request.always(function () {
+                $inputs.prop("disabled", false);
+            });
+
+            
+
+            
+        })
+
+        $("#new-arc-form").submit(function (event) {
+            event.preventDefault();
+
+            var $form = $(this);
+            var $inputs = $form.find("input");
+
+            $inputs.prop("disabled", true);
+
+            var animeTitle = $("#arc-anime-title").val().toString();
+            
+            var Id = $.getAnimeId(animeTitle);
+            console.log("Retrieved id: " + Id);
+
+            var new_arc = $("#arc-arc-title").val().toString();
+
+            var request = $.ajax({
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer ' + localStorage.getItem('JwtToken')
+                },
+                url: "https://localhost:5001/api/Arc/CreateArc",
+                type: "post",
+                dataType: "json",
+                async: false,
+                data: JSON.stringify({ "animeId": Id, "name": new_arc })
+            });
+            request.done(function () {
+                console.log("NewArc: Success 201");
+            });
+
+            request.fail(function (responce) {
+                console.error(
+                    "The following error occurred: " +
+                    responce.responseText.split('.')[0].replace('"', "")
+                );
+            });
+
+            request.always(function () {
+                $inputs.prop("disabled", false);
+            });
+        });
+
+        $("#new-anime-form").submit(function (event) {
+            event.preventDefault();
+            var $form = $(this);
+            var $inputs = $form.find("input");
+
+            var animeName = $('#anime-name').val().toString();
+            var animeYear = $('#anime-year').val();
+            var animeEpisodes = $('#anime-episodes').val();
+            var animeDescription = $('#anime-description').val().toString();
+
+            var animeStatus = $("input:radio[name='status']:checked").val().toString();
+            var animeAgeRestriction = $("input:radio[name='ar']:checked").val().toString(); 
+
+            var animeGenres = new Array();
+            $.each($("input[name='anime-genre']:checked"), function () {
+                animeGenres.push($(this).val().toString());
+            });
+
+            var genresToReturn = Array();
+            for (var i = 0; i < animeGenres.length; i++) {
+                for (var j = 0; j < genres.length; j++) {
+                    if (animeGenres[i] == genres[j].name) {
+                        genresToReturn.push(genres[j]);
+                    }
+                }
+            }
+
+            var files = document.getElementById('img-file').files;
+            var formData = new FormData();
+            formData.append("files", files[0]);
+
+            var filename = files[0].name;
+
+            var animeStatusId = $.getStatusId(animeStatus);
+            console.log("statusId:", animeStatusId);
+            var animeAgeRestrictionId = $.getAgeRestrictionId(animeAgeRestriction);
+            console.log("restr:", animeAgeRestrictionId);
+
+            var animeData =
+            {
+                "Anime" : { "title": animeName, "year": animeYear, "episodes": animeEpisodes,
+                    "image": "Images/" + filename, "description": animeDescription, "statusId": animeStatusId, "ageRestrictionId": animeAgeRestrictionId
+                },
+                "Genres" : genresToReturn
+            };
+
+            var request = $.ajax({
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer ' + localStorage.getItem('JwtToken')
+                },
+                url: "https://localhost:5001/api/Anime/CreateAnime",
+                type: "post",
+                dataType: "json",
+                async: false,
+                data: JSON.stringify(animeData)
+            });
+            request.done(function (response, textStatus, jqXHR) {
+                console.log("NewAnime: Success 201");
+                postImage(formData);
+            });
+
+            request.fail(function (responce, textStatus, errorThrown) {
+                console.error(
+                    "The following error occurred: " +
+                    responce.responseText.split('.')[0].replace('"', "")
+                );
+            });
+
+            request.always(function () {
+                $inputs.prop("disabled", false);
+            });
+        });
+    </script>
+</body>
+</html>

@@ -9,6 +9,23 @@
     height: $height;
 }
 
+@mixin flexCenter($direction) {
+    display: flex;
+    flex-direction: $direction;
+    justify-content: center;
+    align-items: center;
+}
+
+@mixin animeReleaseStatus ($color) {
+    background-color: $color;
+    border-radius: 10px;
+    min-width: 21px;
+    min-height: 18px;
+    padding: 1px 4px;
+    margin-left: 5px;
+    font-weight: 600;
+}
+
 
 * {
     box-sizing: border-box;
@@ -42,6 +59,11 @@ img {
 .navbar .logo {
     font-size: x-large;
     font-weight: bold;
+    color: $primary-accent-color;
+}
+
+.navbar .logo-link {
+    text-decoration: none;
     color: $primary-accent-color;
 }
 
@@ -264,3 +286,570 @@ ul {
     transition-duration: 0.3s;
     cursor: pointer;
 }
+
+.anime-block {
+    width: 1000px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: $intermediate-background-color;
+    padding-bottom: 100px;
+}
+
+.anime-block .header-block {
+    border-bottom: $primary-background-color 2px solid;
+    padding-bottom: 5px;
+    margin-bottom: 5px;
+    @include flexCenter(column);
+}
+
+.anime-block .anime-container {
+    width: 900px;
+}
+
+.anime-block .anime-main-info-block {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.anime-block #anime-image-block {
+    order: 2;
+}
+
+.anime-block #anime-image {
+    height: 300px;
+    width: 200px;
+}
+
+.anime-block .rating-info {
+    display: flex;
+}
+.anime-block .rating-info p {
+    color: white;
+    font-size: 18px;
+    margin-left: 8px;
+}
+
+.anime-block #content-main-info {
+    list-style: none;
+    color: white;
+    font-size: 18px;
+}
+
+.anime-block #content-desc-text {
+    border-top: 2px solid $primary-background-color;
+    color: white;
+    font-size: 18px;
+    max-width: 50%;
+}
+
+.anime-block .spoiler-block {
+    margin-top: 15px;
+    width: 100%;
+    background-color: $primary-background-color;
+}
+
+.anime-block #spoiler-title {
+    background-color: $primary-background-color;
+    border-bottom: 3px solid $secondary-accent-color;
+    cursor: pointer;
+    padding: 5px 10px;
+    color: white;
+    font-size: 18px;
+}
+.anime-block #spoiler-content {
+    display: none;
+}
+
+.anime-block .spoiler-title {
+    color: white;
+    padding: 5px 10px;
+    cursor: pointer;
+    background-color: $primary-background-color;
+    border-bottom: 3px solid #3cce7b;
+    font-size: 18px;
+    margin: 10px 0px;
+}
+
+.anime-block .spoiler-content > p {
+    color: white;
+    font-size: 15px;
+    margin-left: 10px;
+}
+.anime-block #genres {
+    max-width: 500px;
+}
+.anime-block #genres p {
+    display: inline-block;
+    margin-right: 5px;
+    color: $primary-accent-color;
+}
+.anime-block .main-rating {
+    color: #fff;
+    font-size: 18px;
+    background-color: #f2b800;
+    padding: 0 5px;
+    border-radius: 3px;
+    font-weight: 600;
+    cursor: pointer;
+}
+.anime-block .released {
+    @include animeReleaseStatus($secondary-accent-color);
+}
+.anime-block .ongoing {
+    @include animeReleaseStatus($anime-ongoing-color);
+}
+.anime-block .announced {
+    @include animeReleaseStatus($primary-accent-color);
+}
+
+.ap-container {
+    width: 800px;
+    height: 600px;
+    background-color: $primary-background-color;
+    margin: auto;
+
+    .option-container {
+        background-color: $primary-background-color;
+        width: 100%;
+    }
+    
+    .option-container > .ap-option-menu {
+        list-style: none;
+        margin: auto;
+        width: 100%;
+        text-align: center;
+        display: flex;
+        margin-top: 70px;
+        border: 3px solid $intermediate-background-color;
+    }
+    
+    .ap-option-menu > li {
+        color: white;
+        float: left;
+        flex: 1;
+        font-size: 30px;
+    }
+    
+    .ap-option-menu > li:hover {
+        color: $primary-accent-color;
+        transition-duration: 0.3s;
+        cursor: pointer;
+    }
+    
+    .new-anime-block p {
+        color: $primary-accent-color;
+        font-size: 24px;
+        float: left;
+        margin-left: 10px;
+    }
+    
+    .anime-main {
+        width: 250px;
+        height: 180px;
+    }
+    
+    .anime-main > div {
+        width: 100%;
+        height: 60px;
+    }
+    
+    .anime-main > div > input {
+        float: right;
+        margin-right: 10px;
+        margin-top: 9px;
+        background-color: $intermediate-background-color;
+        color: white;
+    }
+    
+    .anime-description-block {
+        width: 544px;
+        height: 180px;
+    }
+    
+    .anime-description-block > p {
+        margin-top: 60px;
+    }
+    
+    .anime-description-block > textarea {
+        width: 400px;
+        float: right;
+        height: 70px;
+        margin-top: 48px;
+        margin-right: 10px;
+        background-color: $intermediate-background-color;
+        color: white;
+    }
+    
+    .anime-status-block {
+        width: 250px;
+        height: 100px;
+    }
+    
+    .anime-status-block > p {
+        margin-top: 30px;
+    }
+    
+    .anime-status-block > div {
+        margin-top: 17px;
+        float: right;
+        margin-right: 50px;
+    }
+    
+    .status-choice label {
+        color: white;
+        cursor: pointer;
+        font-size: 15px;
+    }
+    
+    .status-choice label:hover {
+        color: $primary-accent-color;
+        transition-duration: 0.1s;
+    }
+    
+    .status-choice input[type="radio"] {
+        -webkit-appearance: none;
+        background-color: transparent;
+        margin: 0;
+        color: $primary-background-color;
+        width: 16px;
+        height: 16px;
+        border: 2px solid $primary-accent-color;
+        border-radius: 50%;
+        cursor: pointer;
+        margin-right: 5px;
+    }
+    
+    .status-choice input[type="radio"]:checked {
+        background-color: $primary-accent-color;
+    }
+    
+    .anime-ar-block {
+        height: 100px;
+        width: 544px;
+        float: left;
+    }
+    
+    .anime-ar-block > p {
+        margin-top: 30px;
+    }
+    
+    .ar-choice {
+        float: right;
+        margin-right: 250px;
+        max-height: 100px;
+        display: flex;
+        flex-direction: column;
+        margin-top: 10px;
+    }
+    
+    .ar-choice label {
+        color: white;
+        font-size: 15px;
+        cursor: pointer;
+    }
+    
+    .ar-choice label:hover {
+        color: $primary-accent-color;
+        transition-duration: 0.1s;
+    }
+    
+    .ar-choice input[type="radio"] {
+        -webkit-appearance: none;
+        background-color: transparent;
+        margin: 0;
+        color: $primary-background-color;
+        width: 16px;
+        height: 16px;
+        border: 2px solid $primary-accent-color;
+        border-radius: 50%;
+        cursor: pointer;
+        margin-right: 10px;
+    }
+    
+    .ar-choice input[type="radio"]:checked {
+        background-color: $primary-accent-color;
+    }
+    
+    .anime-genres-block {
+        width: 100%;
+        height: 100px;
+    }
+    
+    .genre-choice {
+        margin-left: 100px;
+        height: 100px;
+        max-width: 300px;
+        display: flex;
+        justify-content: flex-start;
+        flex: 1;
+        flex-wrap: wrap;
+    }
+    
+    .anime-genres-block > p {
+        margin-top: 30px;
+    }
+    
+    .genre-choice input[type="checkbox"] {
+        -webkit-appearance: none;
+        background-color: transparent;
+        margin: 0;
+        width: 16px;
+        height: 16px;
+        border: 2px solid $primary-accent-color;
+        cursor: pointer;
+        margin-right: 5px;
+    }
+    
+    .genre-choice label {
+        color: white;
+        margin-right: 10px;
+        font-size: 17px;
+        cursor: pointer;
+        margin: auto;
+    }
+    
+    .genre-choice label:hover {
+        color: $primary-accent-color;
+        transition-duration: 0.1s;
+    }
+    
+    .genre-choice input[type="checkbox"]:checked {
+        background-color: $primary-accent-color;
+    }
+    
+    .anime-submit-block {
+        margin: auto;
+        height: 100px;
+        width: 300px;
+    }
+    
+    .anime-submit {
+        height: 50px;
+        width: 200px;
+        background-color: $intermediate-background-color;
+        color: $primary-accent-color;
+        font-size: 17px;
+        cursor: pointer;
+        margin: 0;
+    }
+    
+    .upload-image-block {
+        margin: auto;
+        width: 300px;
+        height: 100px;
+        display: flex;
+    }
+    
+    #img-file {
+        cursor: pointer;
+        margin: 0;
+    }
+    
+    .upload-image-block > label {
+        color: white;
+        font-size: 19px;
+        cursor: pointer;
+    }
+    
+    .viewing {
+        background-color: $intermediate-background-color;
+    }
+    
+    .new-anime-block {
+        height: 100%;
+        width: 100%;
+        background-color: $primary-background-color;
+        border: solid 3px $intermediate-background-color;
+        border-top: solid 0px;
+        display: flex;
+        flex-wrap: wrap;
+        flex: 1;
+    }
+    
+    #new-anime-block {
+        display: none;
+    }
+    
+    #new-arc-block {
+        display: none;
+    }
+    
+    .new-arc-block form {
+        height: 150px;
+        width: 100%;
+        display: flex;
+        flex-wrap: wrap;
+        border: solid 3px $intermediate-background-color;
+        border-top: solid 0px;
+    }
+    
+    .arc-anime-title {
+        height: 80px;
+        flex: 1;
+    }
+    
+    .arc-anime-title > label, input {
+        margin-top: 40px;
+        margin-left: 10px;
+    }
+    
+    .arc-anime-title > label {
+        color: $primary-accent-color;
+        font-size: 18px;
+    }
+    
+    .arc-anime-title input {
+        background-color: $intermediate-background-color;
+        color: white;
+        width: 200px;
+    }
+    
+    .arc-arc-title {
+        height: 80px;
+        flex: 1;
+    }
+    
+    .arc-arc-title > label {
+        color: $primary-accent-color;
+        font-size: 18px;
+        float: right;
+        margin-right: 10px;
+    }
+    
+    .arc-arc-title input {
+        background-color: $intermediate-background-color;
+        color: white;
+        width: 200px;
+    }
+    
+    .arc-submit-block {
+        height: 70px;
+        width: 100%;
+        display: flex;
+    }
+    
+    .arc-submit {
+        height: 40px;
+        width: 200px;
+        color: $primary-accent-color;
+        font-size: 17px;
+        background-color: $intermediate-background-color;
+        margin: auto;
+        cursor: pointer;
+    }
+    
+    #new-episode-block {
+        display: none;
+    }
+    
+    .new-episode-block {
+        width: 100%;
+        height: 250px;
+        display: flex;
+        flex-wrap: wrap;
+        border: solid 3px $intermediate-background-color;
+        border-top: solid 0px;
+    }
+    
+    .ep-anime-block {
+        width: 50%;
+        height: 100px;
+        display: flex;
+        justify-content: space-evenly;
+    }
+    
+    .ep-anime-block > label {
+        color: $primary-accent-color;
+        font-size: 18px;
+        margin: auto;
+        margin-left: 10px;
+    }
+    
+    .ep-anime-block input {
+        color: white;
+        background-color: $intermediate-background-color;
+        margin: auto;
+    }
+    
+    .ep-episode-block {
+        height: 100px;
+        width: 50%;
+        display: flex;
+        justify-content: space-evenly;
+    }
+    
+    .ep-episode-block > label {
+        color: $primary-accent-color;
+        font-size: 18px;
+        margin: auto;
+        margin-left: 10px;
+    }
+    
+    .ep-episode-block input {
+        background-color: $intermediate-background-color;
+        color: white;
+        margin: auto;
+    }
+    
+    .ep-submit-block {
+        width: 100%;
+        height: 100px;
+        display: flex;
+    }
+    
+    .ep-submit {
+        height: 40px;
+        width: 200px;
+        color: $primary-accent-color;
+        font-size: 17px;
+        background-color: $intermediate-background-color;
+        margin: auto;
+        cursor: pointer;
+    }
+}
+
+
+#login-section {
+    display: flex;
+    border-bottom: solid 3px;
+    border-bottom-color: $primary-accent-color;
+    border-top: solid 3px;
+    border-top-color: $primary-accent-color;
+    margin-top: 200px;
+    width: 100%;
+    justify-content: center;
+}
+#login-section form {
+    padding: 40px 0;
+    margin: auto;
+    display: flex;
+    flex-direction: column;
+}
+#login-section form > input {
+    width: 200px;
+    background-color: $intermediate-background-color;
+    color: $login-section-color;
+    height: 30px;
+    font-size: 16px;
+}
+#login-section #submit {
+    margin-top: 10px;
+}
+#login-section .successfulResponce {
+    color: $login-section-color;
+}
+#login-section .unsuccessfulResponce {
+    color: $primary-accent-color;
+}
+#login-section #login-responce {
+    padding-top: 10px;
+    font-size: 14px;
+    width: 200px;
+    text-align: center;
+    display: none;
+}
+
+

@@ -9,7 +9,7 @@
         type: "post",
         dataType: "json",
         async: false,
-        data: JSON.stringify(filters)
+        data: JSON.stringify({ "pageArguments": null, "filters": filters })
     });
     request.done(function (response, textStatus, jqXHR) {
         animes = response;

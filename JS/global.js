@@ -1,4 +1,11 @@
-﻿jQuery.extend({
+﻿var apiServerAddress = "https://localhost:5001"; 
+
+function RandomAnime() {
+    var anime = getRandomAnime();
+    $("#random-anime").attr("href", "/HTML/Anime.html?Id=" + anime.id);
+}
+
+jQuery.extend({
     getStatusId: function (statusName) {
         var id = -1;
         $.ajax({
@@ -46,9 +53,67 @@
             }
         });
         return genres;
+    }    
+});
+
+function getRandomAnime() {
+    var anime = null;
+    $.ajax({
+        type: 'get',
+        url: 'https://localhost:5001/api/Anime/GetRandomAnime',
+        dataType: 'json',
+        async: false,
+        success: function (data) {
+            anime = data;
+            console.log(anime);
+        },
+        error: function (errorThrown) {
+            console.log(errorThrown);
+        }
+    });
+    return anime;
+};
+
+function displayLogInOut() {
+    var token = localStorage.getItem("JwtToken");
+    if (token) {
+        var parsedToken = JSON.parse(atob(token.split('.')[1]));
+        if (Date.now() < parsedToken['exp'] * 1000) {
+            $("#login").hide();
+            $("#logout").show();
+        }
+        else {
+            window.clearInterval(timer);
+            $("#login").show();
+            $("#logout").hide();
+            window.localStorage.removeItem("JwtToken");
+        }
     }
-    
-})
+    else {
+        window.clearInterval(timer);
+        $("#login").show();
+        $("#logout").hide();
+        window.localStorage.removeItem("JwtToken");
+    }
+}
+
+function displayAdminPage() {
+    var token = localStorage.getItem("JwtToken");
+    if (token) {
+        var parsedToken = JSON.parse(atob(token.split('.')[1]));
+        if (Date.now() >= parsedToken['exp'] * 1000) {
+            $("#admin-page").hide();
+            return false;
+        }
+        console.log(parsedToken);
+        if (parsedToken['role'] == "Admin") {
+            $("#admin-page").show();
+        }
+        else {
+            $("#admin-page").hide();
+        }
+    }   
+}
 
 function refreshToken() {
     $.ajax({
