@@ -811,8 +811,7 @@ ul {
     }
 }
 
-
-#login-section {
+#login-section, #signup-section {
     display: flex;
     border-bottom: solid 3px;
     border-bottom-color: $primary-accent-color;
@@ -822,34 +821,116 @@ ul {
     width: 100%;
     justify-content: center;
 }
-#login-section form {
+
+#login-section form, #signup-section form {
     padding: 40px 0;
     margin: auto;
     display: flex;
     flex-direction: column;
 }
-#login-section form > input {
+
+#login-section form input, #signup-section form input {
     width: 200px;
     background-color: $intermediate-background-color;
     color: $login-section-color;
     height: 30px;
     font-size: 16px;
 }
-#login-section #submit {
+
+#login-section #submit, #signup-section #submit {
     margin-top: 10px;
 }
-#login-section .successfulResponce {
+
+.successfulResponce {
     color: $login-section-color;
 }
-#login-section .unsuccessfulResponce {
+
+.unsuccessfulResponce {
     color: $primary-accent-color;
 }
-#login-section #login-responce {
-    padding-top: 10px;
+
+#login-section #login-responce, #signup-section #signup-responce {
+    padding-top: 5px;
     font-size: 14px;
     width: 200px;
     text-align: center;
     display: none;
 }
+
+#login-section .sighnUpReroute {
+    text-align: center;
+    color: $anime-ongoing-color;
+    text-decoration: none;
+}
+
+.user-page-content {
+    margin-top: 100px;
+}
+
+.user-page-container {
+    display: flex;
+    width: 850px;
+}
+
+.user-page-container .user-info-section {
+    width: 600px;
+    height: $user-info-section-height;
+    background-color: $intermediate-background-color;
+    display: flex;
+}
+
+.user-page-container .user-image {
+    height: 300px;
+    width: 200px;
+    border-bottom: $primary-background-color 5px solid;
+}
+
+.user-page-container .user-image-block {
+    height: 100%;
+    width: 200px;
+    border-right: $primary-background-color 5px solid;
+}
+
+.user-page-container .user-summary-block {
+    height: 90px;
+    @include flexCenter(column);
+}
+
+.user-page-container .user-info-block {
+    width: 360px;
+    height: 100%;
+    margin-left: 15px;
+
+    p {
+        margin-right: 7px;
+    }
+}
+
+.user-page-container .user-info-piece-block {
+    display: flex;
+    margin-top: 7px;
+}
+
+.user-page-container .user-settings-block {
+    height: $user-info-section-height;
+    background-color: $intermediate-background-color;
+    width: 200px;
+    @include flexCenter(column);
+    border-left: $primary-background-color 5px solid;
+
+
+    a {
+        text-decoration: none;
+        color: $anime-ongoing-color;
+        font-size: 18px;
+    }
+}
+
+#user-page {
+    color: $rating-color;
+}
+
+
+
 
 

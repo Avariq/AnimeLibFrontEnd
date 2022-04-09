@@ -17,6 +17,7 @@
         <div class="container">
             <div class="logo"><a href="index.html?page=1" class="logo-link">AnimeLib</a></div>
             <ul class="menu">
+                <li><a id="user-page" class="user-page" href="HTML/UserPage.html"></a></li>
                 <li><a id="admin-page" class="admin-page" href="HTML/AdminPage.html"> Admin page </a></li>
                 <li><a id="random-anime" href="#">Random Anime</a></li>
                 <li id="login" class="login"><a href="HTML/Login.html">Log in</a></li>
@@ -124,6 +125,7 @@
             timer = window.setInterval(refreshExpiration, 5000);
             displayAdminPage();
             displayLogInOut();
+            displayUserPage();
             $.displayPage(1, animePerPage);
             genres = $.getAllGenres();
             InjectGenres();

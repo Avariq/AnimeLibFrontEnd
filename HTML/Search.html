@@ -17,6 +17,7 @@
         <div class="container">
             <div class="logo"><a class="logo-link" href="../index.html?page=1">AnimeLib</a></div>
             <ul class="menu">
+                <li><a id="user-page" class="user-page" href="UserPage.html"></a></li>
                 <li><a id="admin-page" class="admin-page" href="AdminPage.html"> Admin page </a></li>
                 <li><a id="random-anime" href="#">Random Anime</a></li>
                 <li id="login" class="login"><a href="Login.html">Log in</a></li>
@@ -149,10 +150,10 @@
                 var elem = animes[i];
                 var html = '';
                 html += '<div class="preview-block">';
-                html += '<a href="https://localhost:5001/HTML/Anime.html?Id=' + elem.id + '">';
+                html += '<a href="'+ currentHost + '/HTML/Anime.html?Id=' + elem.id + '">';
                 html += '<img class="preview-img" src="../' + elem.image + '" alt=""/></a>';
                 html += '<div class="preview-info-block">';
-                html += '<a href="https://localhost:5001/HTML/Anime.html?Id=' + elem.id + '" class="preview-title">' + elem.title + '</a>'
+                html += '<a href="'+ currentHost + '/HTML/Anime.html?Id=' + elem.id + '" class="preview-title">' + elem.title + '</a>'
 
                 html += '<div>';
                 var rating = elem.rating;
@@ -205,6 +206,7 @@
             setExpiration();
             displayAdminPage();
             displayLogInOut();
+            displayUserPage();
             RandomAnime();
             timer = window.setInterval(refreshExpiration, 5000);
 

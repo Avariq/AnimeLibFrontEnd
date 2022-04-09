@@ -1,8 +1,24 @@
 ﻿var apiServerAddress = "https://localhost:5001"; 
+var currentHost = "http://127.0.0.1:5500";
 
 function RandomAnime() {
     var anime = getRandomAnime();
     $("#random-anime").attr("href", "/HTML/Anime.html?Id=" + anime.id);
+}
+
+async function sha256(message) {
+    // encode as UTF-8
+    const msgBuffer = new TextEncoder().encode(message);
+
+    // hash the message
+    const hashBuffer = await crypto.subtle.digest('SHA-256', msgBuffer);
+
+    // convert ArrayBuffer to Array
+    const hashArray = Array.from(new Uint8Array(hashBuffer));
+
+    // convert bytes to hex string                  
+    const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+    return hashHex;
 }
 
 jQuery.extend({
@@ -105,7 +121,7 @@ function displayAdminPage() {
             $("#admin-page").hide();
             return false;
         }
-        console.log(parsedToken);
+
         if (parsedToken['role'] == "Admin") {
             $("#admin-page").show();
         }
@@ -113,6 +129,21 @@ function displayAdminPage() {
             $("#admin-page").hide();
         }
     }   
+}
+
+function displayUserPage() {
+    console.log("here");
+    var token = localStorage.getItem("JwtToken");
+    if (token) {
+        var parsedToken = JSON.parse(atob(token.split('.')[1]));
+        if (Date.now() >= parsedToken['exp'] * 1000) {
+            $("#user-page").hide();
+            return false;
+        }
+
+        $("#user-page").text(parsedToken["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/sid"]);
+        $("#user-page").show();
+    }
 }
 
 function refreshToken() {

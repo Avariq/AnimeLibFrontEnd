@@ -941,7 +941,7 @@ ul {
   cursor: pointer;
 }
 
-#login-section {
+#login-section, #signup-section {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -956,7 +956,7 @@ ul {
           justify-content: center;
 }
 
-#login-section form {
+#login-section form, #signup-section form {
   padding: 40px 0;
   margin: auto;
   display: -webkit-box;
@@ -968,7 +968,7 @@ ul {
           flex-direction: column;
 }
 
-#login-section form > input {
+#login-section form input, #signup-section form input {
   width: 200px;
   background-color: #333;
   color: #00ff90;
@@ -976,23 +976,125 @@ ul {
   font-size: 16px;
 }
 
-#login-section #submit {
+#login-section #submit, #signup-section #submit {
   margin-top: 10px;
 }
 
-#login-section .successfulResponce {
+.successfulResponce {
   color: #00ff90;
 }
 
-#login-section .unsuccessfulResponce {
+.unsuccessfulResponce {
   color: #e64242;
 }
 
-#login-section #login-responce {
-  padding-top: 10px;
+#login-section #login-responce, #signup-section #signup-responce {
+  padding-top: 5px;
   font-size: 14px;
   width: 200px;
   text-align: center;
   display: none;
+}
+
+#login-section .sighnUpReroute {
+  text-align: center;
+  color: #9954d8;
+  text-decoration: none;
+}
+
+.user-page-content {
+  margin-top: 100px;
+}
+
+.user-page-container {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  width: 850px;
+}
+
+.user-page-container .user-info-section {
+  width: 600px;
+  height: 400px;
+  background-color: #333;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+}
+
+.user-page-container .user-image {
+  height: 300px;
+  width: 200px;
+  border-bottom: #222 5px solid;
+}
+
+.user-page-container .user-image-block {
+  height: 100%;
+  width: 200px;
+  border-right: #222 5px solid;
+}
+
+.user-page-container .user-summary-block {
+  height: 90px;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+
+.user-page-container .user-info-block {
+  width: 360px;
+  height: 100%;
+  margin-left: 15px;
+}
+
+.user-page-container .user-info-block p {
+  margin-right: 7px;
+}
+
+.user-page-container .user-info-piece-block {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  margin-top: 7px;
+}
+
+.user-page-container .user-settings-block {
+  height: 400px;
+  background-color: #333;
+  width: 200px;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  border-left: #222 5px solid;
+}
+
+.user-page-container .user-settings-block a {
+  text-decoration: none;
+  color: #9954d8;
+  font-size: 18px;
+}
+
+#user-page {
+  color: #ffbb00;
 }
 /*# sourceMappingURL=main.css.map */
