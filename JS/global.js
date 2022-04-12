@@ -1,204 +1,186 @@
-﻿var apiServerAddress = "https://localhost:5001"; 
-var currentHost = "http://127.0.0.1:5500";
-
-function RandomAnime() {
-    var anime = getRandomAnime();
-    $("#random-anime").attr("href", "/HTML/Anime.html?Id=" + anime.id);
-}
+﻿const apiServerAddress = 'https://localhost:5001';
+const currentHost = 'http://127.0.0.1:5500';
 
 async function sha256(message) {
-    // encode as UTF-8
-    const msgBuffer = new TextEncoder().encode(message);
-
-    // hash the message
-    const hashBuffer = await crypto.subtle.digest('SHA-256', msgBuffer);
-
-    // convert ArrayBuffer to Array
-    const hashArray = Array.from(new Uint8Array(hashBuffer));
-
-    // convert bytes to hex string                  
-    const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
-    return hashHex;
+  const msgBuffer = new TextEncoder().encode(message);
+  const hashBuffer = await crypto.subtle.digest('SHA-256', msgBuffer);
+  const hashArray = Array.from(new Uint8Array(hashBuffer));
+  const hashHex = hashArray.map((b) => b.toString(16).padStart(2, '0')).join('');
+  return hashHex;
 }
 
 jQuery.extend({
-    getStatusId: function (statusName) {
-        var id = -1;
-        $.ajax({
-            type: 'get',
-            url: 'https://localhost:5001/api/Anime/GetStatusId?statusName=' + statusName,
-            dataType: 'json',
-            async: false,
-            success: function (data) {
-                id = data;
-            },
-            error: function (errorThrown) {
-                console.log(errorThrown);
-            }
-        });
-        return id;
-    },
-    getAgeRestrictionId: function (ARCode) {
-        var id = -1;
-        $.ajax({
-            type: 'get',
-            url: 'https://localhost:5001/api/Anime/GetAgeRestrictionId?ageRestrictionCode=' + ARCode,
-            dataType: 'json',
-            async: false,
-            success: function (data) {
-                id = data;
-            },
-            error: function (errorThrown) {
-                console.log(errorThrown);
-            }
-        });
-        return id;
-    },
-    getAllGenres: function () {
-        var genres = Array();
-        $.ajax({
-            type: 'get',
-            url: 'https://localhost:5001/api/Anime/GetAllGenres',
-            dataType: 'json',
-            async: false,
-            success: function (data) {
-                genres = data;
-            },
-            error: function (errorThrown) {
-                console.log(errorThrown);
-            }
-        });
-        return genres;
-    }    
+  getStatusId(statusName) {
+    let id = -1;
+    $.ajax({
+      type: 'get',
+      url: `https://localhost:5001/api/Anime/GetStatusId?statusName=${statusName}`,
+      dataType: 'json',
+      async: false,
+      success(data) {
+        id = data;
+      },
+      error(errorThrown) {
+        console.error(errorThrown);
+      },
+    });
+    return id;
+  },
+  getAgeRestrictionId(ARCode) {
+    let id = -1;
+    $.ajax({
+      type: 'get',
+      url: `https://localhost:5001/api/Anime/GetAgeRestrictionId?ageRestrictionCode=${ARCode}`,
+      dataType: 'json',
+      async: false,
+      success(data) {
+        id = data;
+      },
+      error(errorThrown) {
+        console.error(errorThrown);
+      },
+    });
+    return id;
+  },
+  getAllGenres() {
+    let genres = [];
+    $.ajax({
+      type: 'get',
+      url: 'https://localhost:5001/api/Anime/GetAllGenres',
+      dataType: 'json',
+      async: false,
+      success(data) {
+        genres = data;
+      },
+      error(errorThrown) {
+        console.error(errorThrown);
+      },
+    });
+    return genres;
+  },
 });
 
 function getRandomAnime() {
-    var anime = null;
-    $.ajax({
-        type: 'get',
-        url: 'https://localhost:5001/api/Anime/GetRandomAnime',
-        dataType: 'json',
-        async: false,
-        success: function (data) {
-            anime = data;
-            console.log(anime);
-        },
-        error: function (errorThrown) {
-            console.log(errorThrown);
-        }
-    });
-    return anime;
-};
+  let anime = null;
+  $.ajax({
+    type: 'get',
+    url: 'https://localhost:5001/api/Anime/GetRandomAnime',
+    dataType: 'json',
+    async: false,
+    success(data) {
+      anime = data;
+    },
+    error(errorThrown) {
+      console.error(errorThrown);
+    },
+  });
+  return anime;
+}
 
 function displayLogInOut() {
-    var token = localStorage.getItem("JwtToken");
-    if (token) {
-        var parsedToken = JSON.parse(atob(token.split('.')[1]));
-        if (Date.now() < parsedToken['exp'] * 1000) {
-            $("#login").hide();
-            $("#logout").show();
-        }
-        else {
-            window.clearInterval(timer);
-            $("#login").show();
-            $("#logout").hide();
-            window.localStorage.removeItem("JwtToken");
-        }
+  const token = localStorage.getItem('JwtToken');
+  if (token) {
+    const parsedToken = JSON.parse(atob(token.split('.')[1]));
+    if (Date.now() < parsedToken.exp * 1000) {
+      $('#login').hide();
+      $('#logout').show();
+    } else {
+      window.clearInterval(timer);
+      $('#login').show();
+      $('#logout').hide();
+      window.localStorage.removeItem('JwtToken');
     }
-    else {
-        window.clearInterval(timer);
-        $("#login").show();
-        $("#logout").hide();
-        window.localStorage.removeItem("JwtToken");
-    }
+  } else {
+    window.clearInterval(timer);
+    $('#login').show();
+    $('#logout').hide();
+    window.localStorage.removeItem('JwtToken');
+  }
 }
 
 function displayAdminPage() {
-    var token = localStorage.getItem("JwtToken");
-    if (token) {
-        var parsedToken = JSON.parse(atob(token.split('.')[1]));
-        if (Date.now() >= parsedToken['exp'] * 1000) {
-            $("#admin-page").hide();
-            return false;
-        }
+  const token = localStorage.getItem('JwtToken');
+  if (token) {
+    const parsedToken = JSON.parse(atob(token.split('.')[1]));
+    if (Date.now() >= parsedToken.exp * 1000) {
+      $('#admin-page').hide();
+      return false;
+    }
 
-        if (parsedToken['role'] == "Admin") {
-            $("#admin-page").show();
-        }
-        else {
-            $("#admin-page").hide();
-        }
-    }   
+    if (parsedToken.role === 'Admin') {
+      $('#admin-page').show();
+    } else {
+      $('#admin-page').hide();
+    }
+  }
 }
 
 function displayUserPage() {
-    console.log("here");
-    var token = localStorage.getItem("JwtToken");
-    if (token) {
-        var parsedToken = JSON.parse(atob(token.split('.')[1]));
-        if (Date.now() >= parsedToken['exp'] * 1000) {
-            $("#user-page").hide();
-            return false;
-        }
-
-        $("#user-page").text(parsedToken["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/sid"]);
-        $("#user-page").show();
+  const token = localStorage.getItem('JwtToken');
+  if (token) {
+    const parsedToken = JSON.parse(atob(token.split('.')[1]));
+    if (Date.now() >= parsedToken.exp * 1000) {
+      $('#user-page').hide();
+      return false;
     }
+
+    $('#user-page').text(parsedToken['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/sid']);
+    $('#user-page').show();
+  }
 }
 
 function refreshToken() {
-    $.ajax({
-        headers: {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json',
-            'Authorization': 'Bearer ' + localStorage.getItem('JwtToken')
-        },
-        type: "post",
-        url: "https://localhost:5001/api/User/RefreshToken",
-        dataType: "json",
-        async: false,
-        success: function (token) {
-            localStorage.setItem("JwtToken", token);
-        },
-        error: function (errorThrown) {
-            console.log(errorThrown.responseJSON);
-        }
-    });
+  $.ajax({
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${localStorage.getItem('JwtToken')}`,
+    },
+    type: 'post',
+    url: 'https://localhost:5001/api/User/RefreshToken',
+    dataType: 'json',
+    async: false,
+    success(token) {
+      localStorage.setItem('JwtToken', token);
+    },
+    error(errorThrown) {
+      console.log(errorThrown.responseJSON);
+    },
+  });
 }
 
 function setExpiration() {
-    console.log("In setExp");
-    var token = localStorage.getItem("JwtToken");
-    if (token) {
-        var parsedToken = JSON.parse(atob(token.split('.')[1]));
-        if (Date.now() >= parsedToken['exp'] * 1000) {
-            console.log(token);
-            console.log("Expired in setExpiration");
-            window.localStorage.removeItem("JwtToken");
-            window.localStorage.removeItem("Expires");
-        }
-        else {
-            window.localStorage.setItem("Expires", parsedToken['exp'] * 1000);
-        }
+  const token = localStorage.getItem('JwtToken');
+  if (token) {
+    const parsedToken = JSON.parse(atob(token.split('.')[1]));
+    if (Date.now() >= parsedToken.exp * 1000) {
+      window.localStorage.removeItem('JwtToken');
+      window.localStorage.removeItem('Expires');
+    } else {
+      window.localStorage.setItem('Expires', parsedToken.exp * 1000);
     }
-    else {
-        window.localStorage.removeItem("Expires");
-    }
+  } else {
+    window.localStorage.removeItem('Expires');
+  }
 }
 
 function removeExpiration() {
-    if (window.localStorage.getItem("Expires")) {
-        window.localStorage.removeItem("Expires");
-    }
+  if (window.localStorage.getItem('Expires')) {
+    window.localStorage.removeItem('Expires');
+  }
 }
 function refreshExpiration() {
-    var curExp = window.localStorage.getItem("Expires");
-    if (curExp) {
-        var newExp = curExp - Date.now();
-        if (newExp < 60000 * 2) {
-            refreshToken();
-            setExpiration();
-        }
+  const curExp = window.localStorage.getItem('Expires');
+  if (curExp) {
+    const newExp = curExp - Date.now();
+    if (newExp < 60000 * 2) {
+      refreshToken();
+      setExpiration();
     }
+  }
 }
-    
+
+function RandomAnime() {
+  const anime = getRandomAnime();
+  $('#random-anime').attr('href', `/HTML/Anime.html?Id=${anime.id}`);
+}

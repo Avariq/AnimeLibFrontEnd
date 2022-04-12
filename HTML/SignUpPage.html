@@ -33,70 +33,7 @@
         </form>
     </div>
 
-    <script type="text/javascript">
-
-        function SignUpUser()
-        {
-            console.log("eejeje");
-            var username = $("#username").val().toString();
-            var email = $("#email").val().toString();
-            var pass1 = $("#password").val().toString();
-            var pass2 = $("#password2").val().toString();
-
-            if (pass1 != pass2)
-            {
-                $("#signup-responce").text("Passwords do not match.");
-                $("#signup-responce").addClass("unsuccessfulResponce");
-                $("#signup-responce").show();
-
-                return null;
-            }
-
-            var passwordHash = sha256(pass1).then(function (res) {
-                passwordHash = res;
-
-                $.ajax({
-                    headers: {
-                        'Accept': 'application/json',
-                        'Content-Type': 'application/json'
-                    },
-                    type: "post",
-                    url: apiServerAddress + "/api/User/SignUp",
-                    dataType: "json",
-                    data: JSON.stringify({ "username": username, "passwordHash": passwordHash, "email": email }),
-                    async: false,
-                    success: function (token) {
-                        localStorage.setItem("JwtToken", token)
-                        $("#signup-responce")
-                            .text("Account created!")
-                            .removeClass("unsuccessfulResponce")
-                            .addClass("successfulResponce")
-                            .show()
-                        window.location.href = "../index.html?page=1";
-                    },
-                    error: function (errorThrown) {
-                        console.log(errorThrown);
-                        $("#signup-responce")
-                            .text(errorThrown.responseJSON)
-                            .removeClass("successfulResponce")
-                            .addClass("unsuccessfulResponce")
-                            .show()
-                    }
-                });
-            });
-
-            
-        }
-
-        $("#submit").click(function(event) {
-            SignUpUser();
-        });
-
-
-
-
-
-    </script>
+    <script type="text/javascript" src="../JS/SignUpPage.js"></script>
 
 </body>
 </html>
