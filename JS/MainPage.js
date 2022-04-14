@@ -25,7 +25,7 @@ function GetAPI(sourceUrl, successCallback) {
 
 function GetRecent(pageNumber, pageSize) {
   let obj = '';
-  const sourceUrl = `https://localhost:5001/api/Anime/GetRecent?pageNumber=${pageNumber}&pageSize=${pageSize}`;
+  const sourceUrl = `${apiServerAddress}/api/Anime/GetRecent?pageNumber=${pageNumber}&pageSize=${pageSize}`;
   GetAPI(sourceUrl, onSuccess);
 
   return obj;

@@ -9,12 +9,12 @@ async function sha256(message) {
   return hashHex;
 }
 
-jQuery.extend({
+$.extend({
   getStatusId(statusName) {
     let id = -1;
     $.ajax({
       type: 'get',
-      url: `https://localhost:5001/api/Anime/GetStatusId?statusName=${statusName}`,
+      url: `${apiServerAddress}/api/Anime/GetStatusId?statusName=${statusName}`,
       dataType: 'json',
       async: false,
       success(data) {
@@ -30,7 +30,7 @@ jQuery.extend({
     let id = -1;
     $.ajax({
       type: 'get',
-      url: `https://localhost:5001/api/Anime/GetAgeRestrictionId?ageRestrictionCode=${ARCode}`,
+      url: `${apiServerAddress}/api/Anime/GetAgeRestrictionId?ageRestrictionCode=${ARCode}`,
       dataType: 'json',
       async: false,
       success(data) {
@@ -46,7 +46,7 @@ jQuery.extend({
     let genres = [];
     $.ajax({
       type: 'get',
-      url: 'https://localhost:5001/api/Anime/GetAllGenres',
+      url: `${apiServerAddress}/api/Anime/GetAllGenres`,
       dataType: 'json',
       async: false,
       success(data) {
@@ -64,7 +64,7 @@ function getRandomAnime() {
   let anime = null;
   $.ajax({
     type: 'get',
-    url: 'https://localhost:5001/api/Anime/GetRandomAnime',
+    url: `${apiServerAddress}/api/Anime/GetRandomAnime`,
     dataType: 'json',
     async: false,
     success(data) {
@@ -137,14 +137,14 @@ function refreshToken() {
       Authorization: `Bearer ${localStorage.getItem('JwtToken')}`,
     },
     type: 'post',
-    url: 'https://localhost:5001/api/User/RefreshToken',
+    url: `${apiServerAddress}/api/User/RefreshToken`,
     dataType: 'json',
     async: false,
     success(token) {
       localStorage.setItem('JwtToken', token);
     },
     error(errorThrown) {
-      console.log(errorThrown.responseJSON);
+      console.error(errorThrown.responseJSON);
     },
   });
 }

@@ -545,8 +545,8 @@ ul {
 
 .ap-container .anime-main > div > input {
   float: right;
-  margin-right: 10px;
-  margin-top: 9px;
+  margin-right: 40px;
+  margin-top: 0;
   background-color: #333;
   color: white;
 }
